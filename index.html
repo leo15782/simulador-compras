@@ -1,14 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador de compras</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="main.js" defer></script>
-</head>
-<body>
-  <h1 class="titulo">Este es un simulador de compras</h1>
-  <p class="descripcion">En este simulador, podrás realizar compras de productos dentro de un presupuesto preestablecido.</p>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de compras</title>
+    <!-- Favicon con carrito de compras -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <h1 class="titulo">Este es un simulador de compras</h1>
+    <div id="saludo-aleatorio" class="saludo"></div>
+    <p class="descripcion">
+      En este simulador, podrás realizar compras de productos dentro de un
+      presupuesto preestablecido.
+    </p>
+
+    <!-- Sección para configuración inicial -->
+    <div id="configuracion-inicial">
+      <div class="formulario">
+        <h2>Configuración inicial</h2>
+        <div class="campo">
+          <label for="input-usuario">Nombre de usuario:</label>
+          <input
+            type="text"
+            id="input-usuario"
+            placeholder="Ingresa tu nombre"
+            pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1\s]+"
+            title="Solo se permiten letras y espacios"
+            maxlength="50"
+            required
+          />
+          <div id="error-usuario" class="error"></div>
+        </div>
+        <div class="campo">
+          <label for="input-presupuesto">Presupuesto inicial ($):</label>
+          <input
+            type="number"
+            id="input-presupuesto"
+            placeholder="Ingresa tu presupuesto"
+            min="0.01"
+            max="999999999"
+            step="0.01"
+            required
+          />
+          <div id="error-presupuesto" class="error"></div>
+        </div>
+        <button id="btn-iniciar" class="btn-principal">
+          Iniciar simulador
+        </button>
+      </div>
+    </div>
+
+    <!-- Sección principal del simulador -->
+    <div id="simulador-principal" class="oculto">
+      <div id="info-sesion">
+        <p><strong>Usuario:</strong> <span id="usuario-actual"></span></p>
+        <p>
+          <strong>Presupuesto inicial:</strong> $<span
+            id="presupuesto-actual"
+          ></span>
+        </p>
+        <p>
+          <strong>Presupuesto restante:</strong> $<span
+            id="presupuesto-restante-actual"
+          ></span>
+        </p>
+      </div>
+
+      <div class="formulario">
+        <h2>Agregar producto</h2>
+        <div class="campo">
+          <label for="input-nombre-producto">Nombre del producto:</label>
+          <input
+            type="text"
+            id="input-nombre-producto"
+            placeholder="Digite el nombre del producto"
+            pattern="[a-zA-ZÀ-ÿ\u00f1\u00d1\s0-9\-\.]+"
+            title="Solo se permiten letras, números, espacios, guiones y puntos"
+            maxlength="100"
+            required
+          />
+          <div id="error-nombre-producto" class="error"></div>
+        </div>
+        <div class="campo">
+          <label for="input-precio-producto">Precio unitario ($):</label>
+          <input
+            type="number"
+            id="input-precio-producto"
+            placeholder="0.00"
+            min="0.01"
+            max="999999999"
+            step="0.01"
+            required
+          />
+          <div id="error-precio-producto" class="error"></div>
+        </div>
+        <div class="campo">
+          <label for="input-cantidad-producto">Cantidad:</label>
+          <input
+            type="number"
+            id="input-cantidad-producto"
+            placeholder="1"
+            min="1"
+            max="99999"
+            step="1"
+            required
+          />
+          <div id="error-cantidad-producto" class="error"></div>
+        </div>
+        <button id="btn-agregar-producto" class="btn-principal">
+          Agregar producto
+        </button>
+        <button id="btn-finalizar-compra" class="btn-secundario">
+          Finalizar compra
+        </button>
+        <button id="btn-cancelar-compra" class="btn-cancelar">
+          ❌ Cancelar compra
+        </button>
+      </div>
+
+      <div id="productos-actuales">
+        <h3>Productos en tu carrito:</h3>
+        <ul id="lista-carrito"></ul>
+      </div>
+
+      <div id="mensajes"></div>
+    </div>
+
+    <!-- Sección para mostrar el resumen de la compra -->
+    <div id="resumen-compra" class="oculto">
+      <h2>¡Gracias por tu compra!</h2>
+      <div id="info-usuario-final">
+        <p><strong>Usuario:</strong> <span id="nombre-usuario-final"></span></p>
+        <p>
+          <strong>Presupuesto inicial:</strong> $<span
+            id="presupuesto-inicial-final"
+          ></span>
+        </p>
+      </div>
+      <div id="lista-productos-final">
+        <h3>Productos comprados:</h3>
+        <ul id="productos-lista-final"></ul>
+      </div>
+      <div id="totales-final">
+        <p>
+          <strong>Total gastado:</strong> $<span
+            id="total-gastado-final"
+          ></span>
+        </p>
+        <p>
+          <strong>Presupuesto restante:</strong> $<span
+            id="presupuesto-restante-final"
+          ></span>
+        </p>
+      </div>
+      <button id="btn-nueva-compra" class="btn-principal">Nueva compra</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Desarrollado por LE Desarrollo y Soluciones 2025.</p>
+    </footer>
+  </body>
 </html>

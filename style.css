@@ -1,13 +1,376 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+  line-height: 1.6;
+}
+
 .titulo {
-  color: blue;
-  font-size: 24px;
+  color: #2e86ab;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .descripcion {
-  color: gray;
+  color: #666;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.saludo {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px 0;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.oculto {
+  display: none;
+}
+
+.formulario {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.formulario h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.campo input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.campo input:focus {
+  outline: none;
+  border-color: #2e86ab;
+}
+
+.error {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 5px;
+  min-height: 20px;
+}
+
+.btn-principal,
+.btn-secundario {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
+}
+
+.btn-principal {
+  background-color: #2e86ab;
+  color: white;
+}
+
+.btn-principal:hover {
+  background-color: #236a87;
+}
+
+.btn-secundario {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secundario:hover {
+  background-color: #7f8c8d;
+}
+
+.btn-cancelar {
+  background-color: #e74c3c;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 5px;
+  transition: background-color 0.3s;
+}
+
+.btn-cancelar:hover {
+  background-color: #c0392b;
+}
+
+/* Estilos para el modal de confirmación */
+#confirmacion-overlay {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+#confirmacion-overlay > div {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Estilos para elementos del carrito */
+.carrito-vacio {
+  font-style: italic;
+  color: #666;
+}
+
+.producto-carrito {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-eliminar-producto {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-eliminar-producto:hover {
+  background-color: #c0392b;
+  transform: scale(1.1);
+}
+
+/* Estilos para el modal de confirmación */
+.confirmacion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.confirmacion-modal {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-in-out;
+}
+
+.confirmacion-modal h3 {
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+.confirmacion-modal p {
+  margin-bottom: 30px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.confirmacion-modal .btn-confirmar-cancelar {
+  margin-right: 15px;
+}
+#info-sesion {
+  background-color: #e8f4f8;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+#info-sesion p {
+  margin: 5px 0;
   font-size: 16px;
 }
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+
+#productos-actuales {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#productos-actuales h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+#lista-carrito {
+  list-style-type: none;
+  padding: 0;
+}
+
+#lista-carrito li {
+  background-color: #f8f9fa;
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 5px;
+  border-left: 4px solid #2e86ab;
+}
+
+#mensajes {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 8px;
+  min-height: 20px;
+}
+
+.mensaje-exito {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.mensaje-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.mensaje-info {
+  background-color: #cce7ff;
+  border: 1px solid #99d6ff;
+  color: #004085;
+}
+
+#resumen-compra {
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#resumen-compra h2 {
+  color: #27ae60;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
+
+#info-usuario-final p {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+#lista-productos-final {
+  margin: 25px 0;
+}
+
+#lista-productos-final h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+#productos-lista-final {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+  list-style-type: none;
+}
+
+#productos-lista-final li {
+  margin: 8px 0;
+  padding: 8px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#productos-lista-final li:last-child {
+  border-bottom: none;
+}
+
+#totales-final {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 25px 0;
+  text-align: center;
+}
+
+#totales-final p {
+  margin: 8px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Estilos del footer */
+footer {
+  background: linear-gradient(135deg, #2c3e50, #34495e);
+  color: #ecf0f1;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-top: 3px solid #3498db;
+  font-family: "Arial", sans-serif;
+}
+
+footer p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
