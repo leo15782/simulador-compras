@@ -45,13 +45,34 @@ function mostrarSaludoAleatorio() {
   }
 }
 
-// Función para mostrar mensaje
+// Función para mostrar mensaje con SweetAlert2
 function mostrarMensaje(texto, tipo = "info") {
-  const mensajesDiv = document.getElementById("mensajes");
-  if (!mensajesDiv) return;
+  // Mapear tipos a iconos de SweetAlert2
+  const tipoIcono = {
+    exito: "success",
+    error: "error",
+    info: "info",
+    advertencia: "warning",
+  };
 
-  mensajesDiv.textContent = texto;
-  mensajesDiv.className = `mensaje-${tipo}`;
+  // Configuración del toast
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
+  // Mostrar el toast
+  Toast.fire({
+    icon: tipoIcono[tipo] || "info",
+    title: texto,
+  });
 }
 
 // Función para mostrar error en un campo específico
@@ -316,10 +337,22 @@ function iniciarSimulador() {
     actualizarInfoSesion();
     actualizarCarrito();
 
-    mostrarMensaje(
-      `¡Bienvenido/a ${usuario}! Puedes comenzar a agregar productos.`,
-      "exito"
-    );
+    // Mensaje de bienvenida especial con SweetAlert2
+    Swal.fire({
+      title: `¡Bienvenido/a ${usuario}! 🛒`,
+      text: `Presupuesto disponible: ${formatearMoneda(
+        presupuesto
+      )}. ¡Puedes comenzar a agregar productos!`,
+      icon: "success",
+      confirmButtonText: "¡Empezar a comprar!",
+      confirmButtonColor: "#28a745",
+      showClass: {
+        popup: "animate__animated animate__fadeInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__fadeOutUp",
+      },
+    });
   }
 }
 
@@ -657,12 +690,23 @@ function finalizarCompra() {
     return;
   }
 
-  // Ocultar simulador principal
-  document.getElementById("simulador-principal").classList.add("oculto");
-  // Mostrar resumen final
-  document.getElementById("resumen-compra").classList.remove("oculto");
+  // Mostrar alerta de éxito antes del resumen
+  Swal.fire({
+    title: "¡Compra finalizada!",
+    text: "¡Excelente! Tu compra ha sido procesada exitosamente.",
+    icon: "success",
+    confirmButtonText: "Ver resumen",
+    confirmButtonColor: "#28a745",
+    timer: 3000,
+    timerProgressBar: true,
+  }).then(() => {
+    // Ocultar simulador principal
+    document.getElementById("simulador-principal").classList.add("oculto");
+    // Mostrar resumen final
+    document.getElementById("resumen-compra").classList.remove("oculto");
 
-  mostrarResumenFinal();
+    mostrarResumenFinal();
+  });
 }
 
 // Función para mostrar el resumen final
@@ -696,51 +740,26 @@ function mostrarResumenFinal() {
     formatearNumero(restante);
 }
 
-// Función para mostrar confirmación personalizada usando DOM
+// Función para mostrar confirmación con SweetAlert2
 function mostrarConfirmacion(mensaje, onConfirmar, onCancelar) {
-  // Crear el overlay de confirmación
-  const overlay = document.createElement("div");
-  overlay.id = "confirmacion-overlay";
-  overlay.className = "confirmacion-overlay";
-
-  // Crear el modal de confirmación
-  const modal = document.createElement("div");
-  modal.className = "confirmacion-modal";
-
-  // Crear el contenido del modal
-  modal.innerHTML = `
-    <h3>⚠️ Confirmar cancelación</h3>
-    <p>${mensaje}</p>
-    <button id="btn-confirmar-cancelar" class="btn-cancelar btn-confirmar-cancelar">
-      Sí, cancelar
-    </button>
-    <button id="btn-no-cancelar" class="btn-secundario">
-      No, continuar
-    </button>
-  `;
-
-  overlay.appendChild(modal);
-  document.body.appendChild(overlay);
-
-  // Event listeners para los botones
-  document
-    .getElementById("btn-confirmar-cancelar")
-    .addEventListener("click", function () {
-      document.body.removeChild(overlay);
+  Swal.fire({
+    title: "⚠️ Confirmar cancelación",
+    text: mensaje,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, cancelar",
+    cancelButtonText: "No, continuar",
+    reverseButtons: true,
+    backdrop: true,
+    allowOutsideClick: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Usuario confirmó
       if (onConfirmar) onConfirmar();
-    });
-
-  document
-    .getElementById("btn-no-cancelar")
-    .addEventListener("click", function () {
-      document.body.removeChild(overlay);
-      if (onCancelar) onCancelar();
-    });
-
-  // Cerrar al hacer click en el overlay (fondo)
-  overlay.addEventListener("click", function (e) {
-    if (e.target === overlay) {
-      document.body.removeChild(overlay);
+    } else {
+      // Usuario canceló o cerró
       if (onCancelar) onCancelar();
     }
   });
